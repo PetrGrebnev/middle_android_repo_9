@@ -15,16 +15,6 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class LoginViewModelTest {
 
-    companion object {
-        const val STRING_EMPTY = ""
-
-        const val INCORRECT_EMAIL = "practicum#yandex.ru"
-        const val CORRECT_EMAIL = "practicum@yandex.ru"
-        const val PASSWORD = "1234"
-
-        const val DELAY = 3010L
-    }
-
     private lateinit var loginViewModelTest: LoginViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -71,10 +61,17 @@ class LoginViewModelTest {
     fun `attempt login when correct email and password on Success`() = runTest {
         loginViewModelTest.login(CORRECT_EMAIL, PASSWORD)
 
-        testDispatcher.scheduler.runCurrent()
-        testDispatcher.scheduler.advanceTimeBy(DELAY)
+        testDispatcher.scheduler.advanceUntilIdle()
         val state = loginViewModelTest.state.value
 
         assertEquals(LoginScreenState.Success, state)
+    }
+
+    private companion object {
+        const val STRING_EMPTY = ""
+
+        const val INCORRECT_EMAIL = "practicum#yandex.ru"
+        const val CORRECT_EMAIL = "practicum@yandex.ru"
+        const val PASSWORD = "1234"
     }
 }
